@@ -57,6 +57,13 @@ func (de Dirent) IsRegular() bool { return de.modeType&os.ModeType == 0 }
 // set.
 func (de Dirent) IsSymlink() bool { return de.modeType&os.ModeSymlink != 0 }
 
+// IsDevice returns true if and only if the Dirent represents a device file.
+// Note that on some operating systems, more than one file mode
+// bit may be set for a node. For instance, on Windows, a symbolic link that
+// points to a directory will have both the directory and the symbolic link bits
+// set.
+func (de Dirent) IsDevice() bool { return de.modeType&os.ModeDevice != 0 }
+
 // Dirents represents a slice of Dirent pointers, which are sortable by
 // name. This type satisfies the `sort.Interface` interface.
 type Dirents []*Dirent
