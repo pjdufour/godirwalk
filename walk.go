@@ -286,7 +286,9 @@ func walk(osPathname string, dirent *Dirent, options *Options) error {
 			// Read the target of the link.
 			target, err := os.Readlink(osPathname)
 			if err != nil {
-				return err
+				if action := options.ErrorCallback(osPathname, err); action == SkipNode {
+					return nil
+				}
 			}
 			// If callback returns true that indicates the link should be skipped, then return.
 			if options.SkipSymbolicLinkCallback(osPathname, target) {
